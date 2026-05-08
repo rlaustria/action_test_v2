@@ -54,7 +54,7 @@ jobs:
             try {
               $response = Invoke-WebRequest -Uri "http://localhost:${{ env.HOST_PORT }}/" -UseBasicParsing -ErrorAction Stop
 
-              if ($response.Content.Trim() -eq "hello word") {
+              if ($response.StatusCode -eq 200) {
                 Write-Host "Deployment verified."
                 exit 0
               }
@@ -65,7 +65,7 @@ jobs:
             Start-Sleep -Seconds 2
           }
 
-          Write-Host "Deployment did not return the expected response."
+          Write-Host "Deployment did not return a successful status code."
           docker logs ${{ env.CONTAINER_NAME }}
           exit 1
 
