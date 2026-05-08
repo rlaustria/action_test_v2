@@ -19,7 +19,7 @@ env:
 jobs:
   deploy:
     name: Deploy on self-hosted runner
-    runs-on: self-hosted
+    runs-on: [self-hosted, staging]
 
     steps:
       - name: Checkout
