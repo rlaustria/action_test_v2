@@ -29,10 +29,10 @@ jobs:
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
 
       - name: Stop existing container
-        run: docker stop ${{ env.CONTAINER_NAME }} || true
+        run: docker stop ${{ env.CONTAINER_NAME }} 2>$null
 
       - name: Remove existing container
-        run: docker rm ${{ env.CONTAINER_NAME }} || true
+        run: docker rm ${{ env.CONTAINER_NAME }} 2>$null
 
       - name: Start new container
         run: >
@@ -45,7 +45,7 @@ jobs:
       - name: Verify deployment
         run: |
           for attempt in {1..10}; do
-            response="$(curl -fsS http://localhost:${{ env.HOST_PORT }}/ || true)"
+            response="$(curl -fsS http://localhost:${{ env.HOST_PORT }}/ 2>$null)"
             if [ "$response" = "hello word" ]; then
               echo "Deployment verified."
               exit 0
