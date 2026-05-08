@@ -29,7 +29,9 @@ jobs:
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
 
       - name: Stop and delete existing container
-        run: docker rm -f hello-express 2>$null
+        run: |
+          docker rm -f hello-express 2>$null
+          exit 0
 
       - name: Start new container
         run: >
