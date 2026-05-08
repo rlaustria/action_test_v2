@@ -28,11 +28,8 @@ jobs:
       - name: Build Docker image locally
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
 
-      - name: Stop existing container
-        run: docker stop ${{ env.CONTAINER_NAME }} 2>$null
-
-      - name: Remove existing container
-        run: docker rm ${{ env.CONTAINER_NAME }} 2>$null
+      - name: Stop and delete existing container
+        run: docker rm -f hello-express 2>$null
 
       - name: Start new container
         run: >
