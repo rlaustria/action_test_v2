@@ -29,9 +29,15 @@ jobs:
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
 
       - name: Stop and delete existing container
+        shell: powershell
         run: |
-          docker rm -f hello-express 2>$null
-          exit 0
+          $container = docker ps -a --filter "name=^hello-express$" --format "{{.Names}}"
+
+          if ($container -eq "hello-express") {
+            docker rm -f hello-express
+          } else {
+            Write-Host "Container hello-express does not exist. Skipping."
+          }
 
       - name: Start new container
         run: >
