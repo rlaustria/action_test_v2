@@ -17,8 +17,29 @@ env:
   CONTAINER_PORT: 3000
 
 jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
   deploy:
     name: Deploy on self-hosted runner
+    needs: test
     runs-on: [self-hosted, staging]
 
     steps:

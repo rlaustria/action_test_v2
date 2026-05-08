@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "hello.js",
   "scripts": {
-    "start": "node hello.js"
+    "start": "node hello.js",
+    "test": "node --test"
   },
   "dependencies": {
     "express": "^5.1.0"
