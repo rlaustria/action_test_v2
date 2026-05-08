@@ -48,17 +48,24 @@ jobs:
           ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Verify deployment
+        shell: powershell
         run: |
-          for attempt in {1..10}; do
-            response="$(curl -fsS http://localhost:${{ env.HOST_PORT }}/ 2>$null)"
-            if [ "$response" = "hello word" ]; then
-              echo "Deployment verified."
-              exit 0
-            fi
-            sleep 2
-          done
+          for ($attempt = 1; $attempt -le 10; $attempt++) {
+            try {
+              $response = Invoke-WebRequest -Uri "http://localhost:${{ env.HOST_PORT }}/" -UseBasicParsing -ErrorAction Stop
 
-          echo "Deployment did not return the expected response."
+              if ($response.Content.Trim() -eq "hello word") {
+                Write-Host "Deployment verified."
+                exit 0
+              }
+            } catch {
+              Write-Host "Attempt $attempt failed: $($_.Exception.Message)"
+            }
+
+            Start-Sleep -Seconds 2
+          }
+
+          Write-Host "Deployment did not return the expected response."
           docker logs ${{ env.CONTAINER_NAME }}
           exit 1
 
