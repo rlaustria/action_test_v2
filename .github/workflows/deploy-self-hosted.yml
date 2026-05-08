@@ -1,0 +1,61 @@
+name: Deploy Self Hosted
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-self-hosted
+  cancel-in-progress: true
+
+env:
+  IMAGE_NAME: hello-express
+  CONTAINER_NAME: hello-express
+  HOST_PORT: 3000
+  CONTAINER_PORT: 3000
+
+jobs:
+  deploy:
+    name: Deploy on self-hosted runner
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image locally
+        run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
+
+      - name: Stop existing container
+        run: docker stop ${{ env.CONTAINER_NAME }} || true
+
+      - name: Remove existing container
+        run: docker rm ${{ env.CONTAINER_NAME }} || true
+
+      - name: Start new container
+        run: >
+          docker run -d
+          --name ${{ env.CONTAINER_NAME }}
+          --restart unless-stopped
+          -p ${{ env.HOST_PORT }}:${{ env.CONTAINER_PORT }}
+          ${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Verify deployment
+        run: |
+          for attempt in {1..10}; do
+            response="$(curl -fsS http://localhost:${{ env.HOST_PORT }}/ || true)"
+            if [ "$response" = "hello word" ]; then
+              echo "Deployment verified."
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "Deployment did not return the expected response."
+          docker logs ${{ env.CONTAINER_NAME }}
+          exit 1
+
+      - name: Tag successful local image
+        run: docker tag ${{ env.IMAGE_NAME }}:${{ github.sha }} ${{ env.IMAGE_NAME }}:latest
