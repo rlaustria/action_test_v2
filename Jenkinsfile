@@ -43,7 +43,7 @@ pipeline {
                     if (status == 0) {
                         println "passed"
                         env.TESTS_PASSED = 'true'
-                        println env.TESTS_PASSED
+                        echo "PASS after=${env.TESTS_PASSED}"
                     } else {
                         env.TESTS_PASSED = 'false'
                         error 'Tests failed'
