@@ -25,6 +25,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 deleteDir()
+                cleanWs()
                 checkout scm
             }
         }
