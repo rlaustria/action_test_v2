@@ -47,6 +47,7 @@ pipeline {
                         error 'Tests failed'
                     }
                 }
+                echo "After test: TESTS_PASSED=${env.TESTS_PASSED}"
             }
         }
 
