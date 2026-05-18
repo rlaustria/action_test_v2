@@ -41,9 +41,9 @@ pipeline {
                     def status = sh(script: 'npm test', returnStatus: true)
 
                     if (status == 0) {
-                        println status
                         println "passed"
                         env.TESTS_PASSED = 'true'
+                        println env.TESTS_PASSED
                     } else {
                         env.TESTS_PASSED = 'false'
                         error 'Tests failed'
