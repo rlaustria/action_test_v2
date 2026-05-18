@@ -41,12 +41,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            when {
-                expression {
-                    env.TESTS_PASSED == 'true'
-                }
-            }
-
             stages {
                 stage('Prepare image tag') {
                     steps {
