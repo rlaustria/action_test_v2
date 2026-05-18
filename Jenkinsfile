@@ -36,10 +36,12 @@ pipeline {
 
         stage('Run tests') {
             steps {
+                echo "PASS=${env.TESTS_PASSED}"
                 sh 'npm test'
                 script {
                     env.TESTS_PASSED = 'true'
                 }
+                echo "PASS=${env.TESTS_PASSED}"
             }
         }
 
