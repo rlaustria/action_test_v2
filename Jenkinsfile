@@ -43,7 +43,6 @@ pipeline {
             }
         }
 
-        /*
         stage('Deploy') {
             when {
                 expression {
@@ -60,6 +59,17 @@ pipeline {
                                 returnStdout: true
                             ).trim()
                         }
+                    }
+                }
+
+                stage('Build Docker image locally') {
+                    steps {
+                        sh '''\
+                            |#!/usr/bin/env bash
+                            |set -euo pipefail
+                            |
+                            |docker build -t "${IMAGE_NAME}:${IMAGE_TAG}" .
+                            |'''.stripMargin()
                     }
                 }
 
@@ -134,6 +144,5 @@ pipeline {
                 }
             }
         }
-        */
     }
 }
