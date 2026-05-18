@@ -37,11 +37,16 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo "PASS=${env.TESTS_PASSED}"
-                sh 'npm test'
                 script {
-                    env.TESTS_PASSED = 'true'
+                    def status = sh(script: 'npm test', returnStatus: true)
+
+                    if (status == 0) {
+                        env.TESTS_PASSED = 'true'
+                    } else {
+                        env.TESTS_PASSED = 'false'
+                        error 'Tests failed'
+                    }
                 }
-                echo "PASS=${env.TESTS_PASSED}"
             }
         }
 
