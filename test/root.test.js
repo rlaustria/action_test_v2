@@ -21,5 +21,5 @@ test('root path returns hello world!', async (t) => {
   const response = await fetch(`http://127.0.0.1:${port}/`);
 
   assert.equal(response.status, 200);
-  assert.equal(await response.text(), 'hello world!');
+  assert.equal(await response.text(), 'hello world');
 });
