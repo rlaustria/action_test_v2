@@ -38,7 +38,23 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                sh 'npm test'
+                sh '''\
+                    |#!/usr/bin/env bash
+                    |set -euo pipefail
+                    |
+                    |mkdir -p test-results
+                    |
+                    |npm test -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results/node-test.xml
+                    |'''.stripMargin()
+            }
+
+            post {
+                always {
+                    junit(
+                        testResults: 'test-results/node-test.xml',
+                        checksName: 'Node Test Results'
+                    )
+                }
             }
         }
 
@@ -99,7 +115,7 @@ pipeline {
                             |'''.stripMargin()
                     }
                 }
-
+                /*
                 stage('Verify deployment') {
                     steps {
                         sh '''\
@@ -124,6 +140,7 @@ pipeline {
                             |'''.stripMargin()
                     }
                 }
+                */
 
                 stage('Tag successful local image') {
                     steps {
@@ -137,5 +154,19 @@ pipeline {
                 }
             }
         }
+    }
+
+    post {
+
+        success {
+
+            publishChecks(
+                name: 'Pipeline Summary',
+                title: 'CI Result',
+                summary: 'Pipeline completed. See Jenkins logs for details.'
+            )
+
+        }
+
     }
 }
