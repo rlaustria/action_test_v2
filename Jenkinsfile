@@ -137,25 +137,25 @@ pipeline {
                 }
             }
         }
+    }
 
-        post {
+    post {
 
-            success {
-                publishChecks(
-                    name: 'ESLint',
-                    title: 'Lint Passed',
-                    summary: 'No lint issues found.'
-                )
-            }
-
-            failure {
-                publishChecks(
-                    name: 'ESLint',
-                    title: 'Lint Failed',
-                    summary: 'Linting errors detected.'
-                )
-            }
-
+        success {
+            publishChecks(
+                name: 'ESLint',
+                title: 'Lint Passed',
+                summary: 'No lint issues found.'
+            )
         }
+
+        failure {
+            publishChecks(
+                name: 'ESLint',
+                title: 'Lint Failed',
+                summary: 'Linting errors detected.'
+            )
+        }
+
     }
 }
