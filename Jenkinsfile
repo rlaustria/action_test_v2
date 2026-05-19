@@ -44,7 +44,7 @@ pipeline {
                     |
                     |mkdir -p test-results
                     |
-                    |npm --test --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results/node-test.xml
+                    |npm test -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=test-results/node-test.xml
                     |'''.stripMargin()
             }
 
