@@ -42,13 +42,13 @@ pipeline {
                     |#!/usr/bin/env bash
                     |set -euo pipefail
                     |
-                    |mkdir -p test_results
+                    |mkdir -p test-results
                     |
-                    |npm test -- \
+                    |npm --test \
                     |    --test-reporter=spec \
                     |    --test-reporter-destination=stdout \
                     |    --test-reporter=junit \
-                    |    --test-reporter-destination=test_results/node-test.xml
+                    |    --test-reporter-destination=test-results/node-test.xml
                     |'''.stripMargin()
             }
 
