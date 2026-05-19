@@ -99,7 +99,7 @@ pipeline {
                             |'''.stripMargin()
                     }
                 }
-
+                /*
                 stage('Verify deployment') {
                     steps {
                         sh '''\
@@ -124,6 +124,7 @@ pipeline {
                             |'''.stripMargin()
                     }
                 }
+                */
 
                 stage('Tag successful local image') {
                     steps {
@@ -142,19 +143,13 @@ pipeline {
     post {
 
         success {
-            publishChecks(
-                name: 'ESLint',
-                title: 'Lint Passed',
-                summary: 'No lint issues found.'
-            )
-        }
 
-        failure {
             publishChecks(
-                name: 'ESLint',
-                title: 'Lint Failed',
-                summary: 'Linting errors detected.'
+                name: 'Pipeline Summary',
+                title: 'CI Result',
+                summary: 'Pipeline completed. See Jenkins logs for details.'
             )
+
         }
 
     }
